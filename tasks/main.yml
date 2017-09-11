@@ -9,13 +9,15 @@
   with_items: "{{ awx_package_dependencies }}"
 
 - name: Clone AWX into configured directory.
+  connection: local
+  delegate_to: localhost
   git:
     repo: "{{ awx_repo }}"
-    dest: "{{ awx_repo_dir }}"
+    dest: "{{ role_path }}/tasks/awx_repo/"
     version: "{{ awx_version }}"
     update: "{{ awx_keep_updated }}"
     force: yes
     accept_hostkey: yes
 
-- include: awx-install-playbook.yml
+- include: "{{ role_path }}/tasks/awx_repo/installer/install.yml"
   when: awx_run_install_playbook
